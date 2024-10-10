@@ -1,10 +1,9 @@
 use std::io;
 use std::io::Write;
-use std::str::FromStr;
 
 use anyhow::{bail, Result};
 use cdk::amount::SplitTarget;
-use cdk::nuts::{Conditions, CurrencyUnit, PublicKey, SpendingConditions, Token};
+use cdk::nuts::{CurrencyUnit, Token};
 use cdk::wallet::multi_mint_wallet::WalletKey;
 use cdk::wallet::types::SendKind;
 use cdk::wallet::MultiMintWallet;
@@ -67,7 +66,16 @@ pub async fn send(
         .expect("Known wallet");
 
     // TODO: Use wallet.send to create token
-    let token: Token = todo!();
+    let token: Token = wallet
+        .send(
+            token_amount,
+            None,
+            None,
+            &SplitTarget::default(),
+            &SendKind::default(),
+            false,
+        )
+        .await?;
 
     match sub_command_args.v3 {
         true => {
