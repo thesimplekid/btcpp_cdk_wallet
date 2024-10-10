@@ -119,11 +119,10 @@ async fn create_multimint_wallet(
     // TODO: Get mints from localstore
     let mints = localstore.get_mints().await?;
 
-    // TODO: For mint in store create wallet
     for (mint, _) in mints {
         let wallet = Wallet::new(
             &mint.to_string(),
-            CurrencyUnit::Sat,
+            cdk::nuts::CurrencyUnit::Sat,
             localstore.clone(),
             seed,
             None,
