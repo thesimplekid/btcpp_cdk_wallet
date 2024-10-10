@@ -67,10 +67,6 @@
           nixpkgs-fmt
           rust-analyzer
           typos
-          lnd
-          clightning
-          bitcoind
-          sqlx-cli
         ] ++ libsDarwin;
 
         # WASM deps
