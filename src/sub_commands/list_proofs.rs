@@ -3,7 +3,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use cdk::cdk_database::{Error, WalletDatabase};
 use cdk::mint_url::MintUrl;
-use cdk::nuts::{CurrencyUnit, MintQuoteState};
+use cdk::nuts::CurrencyUnit;
 use cdk::wallet::MultiMintWallet;
 use clap::Args;
 use serde::{Deserialize, Serialize};
@@ -33,7 +33,9 @@ pub async fn list_proofs(
     )
     .await?;
 
-    let proofs = wallet.get_proofs().await?;
+    let mut proofs = wallet.get_proofs().await?;
+
+    proofs.sort();
 
     for proof in proofs {
         println!("Amount: {}, Secret: {}", proof.amount, proof.secret);
