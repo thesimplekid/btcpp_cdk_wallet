@@ -57,11 +57,12 @@ async fn main() -> anyhow::Result<()> {
 
     let localstore = create_localstore().await;
 
-    let multi_mint_wallet = create_multimint_wallet();
-
     let mut rng = rand::thread_rng();
     let random_bytes: [u8; 32] = rng.gen();
     let mnemonic = Mnemonic::from_entropy(&random_bytes)?;
+
+    let multi_mint_wallet =
+        create_multimint_wallet(&mnemonic.to_seed_normalized(""), localstore.clone()).await?;
 
     match args.command {
         Commands::Mint(sub_command_args) => {
@@ -104,8 +105,22 @@ async fn create_localstore() -> Arc<dyn WalletDatabase<Err = cdk_database::Error
     todo!()
 }
 
-fn create_multimint_wallet() -> MultiMintWallet {
-    todo!()
+async fn create_multimint_wallet(
+    seed: &[u8],
+    localstore: Arc<dyn WalletDatabase<Err = cdk_database::Error> + Sync + Send>,
+) -> anyhow::Result<MultiMintWallet> {
+    let mut wallets: Vec<Wallet> = Vec::new();
+
+    // TODO: Get mints from localstore
+    let mints = todo!();
+
+    // TODO: For mint in store create wallet
+    for (mint, _) in mints {
+        let wallet = todo!();
+        wallets.push(wallet);
+    }
+
+    Ok(MultiMintWallet::new(wallets))
 }
 
 pub async fn get_single_mint_wallet(
