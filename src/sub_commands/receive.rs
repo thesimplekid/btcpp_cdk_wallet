@@ -41,9 +41,11 @@ pub async fn receive(
 
     // TODO: Call receive on multi mint wallet
 
-    let amount = todo!();
+    let amount = multi_mint_wallet
+        .receive(&token_str, &signing_keys, &[])
+        .await?;
 
-    // println!("Received: {}", amount);
+    println!("Received: {}", amount);
 
     Ok(())
 }
