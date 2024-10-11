@@ -39,13 +39,24 @@ pub async fn mint(
     )
     .await?;
 
-    // TODO: Get mint qoute
+    // TODO: Get mint quote
+    let mint_quote = wallet.mint_quote(10.into(), None).await?;
 
-    // loop {
-    //     // TODO: Check mint quote status
-    // }
+    println!("{:#?}", mint_quote);
+
+    loop {
+        // TODO: Check mint quote status
+        let state = wallet.mint_quote_state(&mint_quote.id).await?;
+
+        if state.state == MintQuoteState::Paid {
+            break;
+        }
+    }
 
     // TODO: Mint once quote has been paid
+    let mint = wallet.mint(&mint_quote.id, SplitTarget::None, None).await?;
+
+    println!("{}", mint);
 
     Ok(())
 }

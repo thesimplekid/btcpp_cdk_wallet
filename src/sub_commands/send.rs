@@ -67,7 +67,16 @@ pub async fn send(
         .expect("Known wallet");
 
     // TODO: Use wallet.send to create token
-    let token: Token = todo!();
+    let token: Token = wallet
+        .send(
+            5.into(),
+            None,
+            None,
+            &SplitTarget::None,
+            &SendKind::OnlineExact,
+            false,
+        )
+        .await?;
 
     match sub_command_args.v3 {
         true => {
