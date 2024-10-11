@@ -1,4 +1,4 @@
-use std::{fs, sync::Arc};
+use std::{fs, path::PathBuf, str::FromStr, sync::Arc};
 
 use bip39::Mnemonic;
 use cdk::{
@@ -102,7 +102,12 @@ async fn main() -> anyhow::Result<()> {
 }
 
 async fn create_localstore() -> Arc<dyn WalletDatabase<Err = cdk_database::Error> + Send + Sync> {
-    todo!()
+    let path = PathBuf::from_str(DEFAULT_WORK_DIR)
+        .unwrap()
+        .join("cdk-wallet");
+    let local = cdk_redb::WalletRedbDatabase::new(&path).unwrap();
+
+    Arc::new(local)
 }
 
 async fn create_multimint_wallet(
@@ -112,11 +117,18 @@ async fn create_multimint_wallet(
     let mut wallets: Vec<Wallet> = Vec::new();
 
     // TODO: Get mints from localstore
-    let mints = todo!();
+    let mints = localstore.get_mints().await?;
 
     // TODO: For mint in store create wallet
     for (mint, _) in mints {
-        let wallet = todo!();
+        let wallet = Wallet::new(
+            &mint.to_string(),
+            CurrencyUnit::Sat,
+            localstore.clone(),
+            seed,
+            None,
+        )
+        .unwrap();
         wallets.push(wallet);
     }
 

@@ -61,13 +61,18 @@ pub async fn pay(
     }
 
     // TODO: Get melt quote
+    let melt = wallet.melt_quote(bolt11.to_string(), None).await?;
+
+    println!("{:#?}", melt);
 
     // TODO: Melt with melt quote
 
-    // println!("Paid invoice: {}", melt.state);
-    // if let Some(preimage) = melt.preimage {
-    //     println!("Payment preimage: {}", preimage);
-    // }
+    let melt = wallet.melt(&melt.id).await?;
+
+    println!("Paid invoice: {}", melt.state);
+    if let Some(preimage) = melt.preimage {
+        println!("Payment preimage: {}", preimage);
+    }
 
     Ok(())
 }
